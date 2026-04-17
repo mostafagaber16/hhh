@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Queen Habiba</title>
+    <title>Surprise for Elaa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -12,108 +12,152 @@
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #fdf2f8; overflow-x: hidden; margin: 0; }
         .handwritten { font-family: 'Caveat', cursive; }
-        .envelope-wrapper { display: none; opacity: 0; margin-top: 2rem; }
+        
+        /* Envelope Styling - Like first surprise */
         .envelope-classic {
             width: 250px; height: 170px; background: #fbcfe8; border-radius: 10px;
             position: relative; cursor: pointer; margin: 0 auto;
-            box-shadow: 0 15px 35px rgba(219, 39, 119, 0.2);
+            box-shadow: 0 15px 35px rgba(219, 39, 119, 0.2); transition: transform 0.3s;
         }
+        .envelope-classic:hover { transform: scale(1.05); }
         .envelope-classic::after {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             border-left: 125px solid transparent; border-right: 125px solid transparent;
             border-top: 90px solid #f9a8d4; border-radius: 10px 10px 0 0;
         }
-        .heart-icon { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 10; font-size: 2.5rem; }
-        .floating { animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .hidden-section { display: none !important; }
+        .heart-icon-big { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 10; font-size: 2.5rem; color: #db2777; }
+        
+        /* Floating Heart Decor */
+        .decor-heart { position: absolute; font-size: 1.5rem; color: #f9a8d4; opacity: 0.6; pointer-events: none; }
+        @keyframes heartFloat { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(5px, -15px); } }
+        
+        /* Full Screen Transitions */
+        @keyframes scaleIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .hidden-section { display: none; }
+        .step-transition { animation: scaleIn 0.8s ease-out forwards; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
+    <script> (new Image()).src = 'https://i.ibb.co/Xz9kHkQ/red-heart-bg.png'; </script>
+
     <div id="step-1" class="text-center w-full max-w-lg">
-        <h1 id="typing-text" class="handwritten text-4xl text-pink-600 min-h-[60px]"></h1>
-        <div class="envelope-wrapper" id="envelope-div">
-            <div class="envelope-classic floating" onclick="startSurprise()">
-                <div class="heart-icon">❤️</div>
-            </div>
-            <p class="mt-4 text-pink-400 font-semibold animate-pulse">Click the heart to open</p>
+        <h1 id="typing-head" class="handwritten text-4xl text-pink-600 min-h-[60px]"></h1>
+        <div class="envelope-classic mt-10" id="envelope-div" onclick="startSurprise()">
+            <div class="heart-icon-big">❤️</div>
         </div>
+        <p id="typing-emails" class="handwritten text-2xl text-pink-500 mt-6 min-h-[40px]"></p>
     </div>
 
     <div id="step-2" class="hidden-section fixed inset-0 bg-pink-500 z-50 flex flex-col items-center justify-center p-6 text-white text-center">
-        <h2 class="handwritten text-5xl md:text-7xl mb-6">Surprise for Habiba!</h2>
+        <h2 class="handwritten text-5xl md:text-7xl mb-6">Surprise for Elaa!</h2>
         <p class="text-xl mb-10 opacity-90">I made this especially for you...</p>
-        <button onclick="finalReveal()" class="bg-white text-pink-600 px-12 py-4 rounded-full font-bold text-2xl shadow-2xl hover:scale-110 transition-transform">
+        <button onclick="finalReveal()" class="bg-white text-pink-600 px-12 py-4 rounded-full font-bold text-2xl shadow-2xl hover:bg-pink-50 transition-all">
             See attachment ✨
         </button>
     </div>
 
-    <div id="step-3" class="hidden-section w-full max-w-5xl py-12">
-        <div class="bg-white rounded-[40px] p-8 shadow-2xl border-4 border-pink-100 text-center mb-16 mx-4">
-            <h2 class="handwritten text-4xl text-pink-600 mb-6">My Soul Habiba ❤️</h2>
-            <p id="final-message" class="text-gray-700 text-lg leading-relaxed italic"></p>
+    <div id="step-3" class="hidden-section w-full max-w-5xl py-12 px-4">
+        
+        <div class="relative w-full max-w-3xl mx-auto mb-20 p-8 md:p-12">
+            <img src="https://i.ibb.co/Xz9kHkQ/red-heart-bg.png" class="absolute inset-0 w-full h-full object-contain" alt="Heart Background">
+            
+            <div class="relative z-10 text-center text-white px-4 pt-10 pb-6 handwritten">
+                <h2 class="text-5xl mb-6">Dear Elaa...❤️</h2>
+                <p id="final-message" class="text-xl leading-relaxed italic"></p>
+            </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-6">
-            <div class="bg-white p-3 rounded-2xl shadow-lg transform rotate-2">
-                <img src="1.jpg.JPG" class="rounded-xl w-full h-72 object-cover" onerror="this.src='https://via.placeholder.com/400x500?text=Habiba+1'">
-                <p class="handwritten text-xl text-pink-500 mt-2 text-center">Smartest</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative px-4">
+            <div class="decor-heart" style="top: 10%; left: 5%; animation: heartFloat 5s ease-in-out infinite">❤️</div>
+            <div class="decor-heart" style="top: 80%; left: 20%; animation: heartFloat 4s ease-in-out infinite">❤️</div>
+            <div class="decor-heart" style="top: 50%; right: 10%; animation: heartFloat 6s ease-in-out infinite">❤️</div>
+            
+            <div class="group">
+                <div class="bg-white p-4 rounded-3xl shadow-xl transform rotate-2 transition-transform hover:-rotate-1">
+                    <img src="1.jpg" class="rounded-2xl w-full h-80 object-cover bg-pink-100" onerror="this.src='https://via.placeholder.com/400x500?text=Elaa+1'">
+                    <p class="handwritten text-2xl text-pink-500 mt-4 text-center">Smartest Elaa</p>
+                </div>
             </div>
-            <div class="bg-white p-3 rounded-2xl shadow-lg transform -rotate-2">
-                <img src="2.jpg.JPG" class="rounded-xl w-full h-72 object-cover" onerror="this.src='https://via.placeholder.com/400x500?text=Habiba+2'">
-                <p class="handwritten text-xl text-pink-500 mt-2 text-center">Most Beautiful</p>
+            <div class="group">
+                <div class="bg-white p-4 rounded-3xl shadow-xl transform -rotate-2 transition-transform hover:rotate-1">
+                    <img src="2.jpg" class="rounded-2xl w-full h-80 object-cover bg-pink-100" onerror="this.src='https://via.placeholder.com/400x500?text=Elaa+2'">
+                    <p class="handwritten text-2xl text-pink-500 mt-4 text-center">Most Beautiful Elaa</p>
+                </div>
             </div>
-            <div class="bg-white p-3 rounded-2xl shadow-lg transform rotate-1">
-                <img src="3.jpg.JPG" class="rounded-xl w-full h-72 object-cover" onerror="this.src='https://via.placeholder.com/400x500?text=Habiba+3'">
-                <p class="handwritten text-xl text-pink-500 mt-2 text-center">Best Girl Ever</p>
+            <div class="group">
+                <div class="bg-white p-4 rounded-3xl shadow-xl transform rotate-1 transition-transform hover:-rotate-2">
+                    <img src="3.jpg" class="rounded-2xl w-full h-80 object-cover bg-pink-100" onerror="this.src='https://via.placeholder.com/400x500?text=Elaa+3'">
+                    <p class="handwritten text-2xl text-pink-500 mt-4 text-center">Best Elaa Ever</p>
+                </div>
             </div>
+        </div>
+        
+        <div class="text-center mt-20 relative">
+            <h2 class="handwritten text-5xl md:text-6xl text-pink-600 mb-4">You are everything, Elaa.</h2>
+            <div class="text-4xl">❤️ ❤️ ❤️ ❤️</div>
         </div>
     </div>
 
     <script>
-        // تأثير الكتابة في البداية
-        const text = "hey Habiba! you've got a new surprise/";
-        let i = 0;
-        function type() {
-            if (i < text.length) {
-                document.getElementById("typing-text").innerHTML += text.charAt(i);
-                i++;
-                setTimeout(type, 100);
+        // 1. Typing Logic for Page 1
+        const headText = "hey Elaa! you've got/";
+        const emailText = "you've got new emails/";
+        let iH = 0, iE = 0;
+
+        function typeHead() {
+            if (iH < headText.length) {
+                document.getElementById("typing-head").innerHTML += headText.charAt(iH); iH++;
+                setTimeout(typeHead, 100);
             } else {
-                document.getElementById("envelope-div").style.display = "block";
-                gsap.to("#envelope-div", { opacity: 1, duration: 1 });
+                // Show envelope when head finishes
+                gsap.to("#envelope-div", { display: 'block', opacity: 1, duration: 1 });
+                setTimeout(typeEmails, 1000); // Start email text after delay
             }
         }
-        window.onload = type;
 
-        // الانتقال للمرحلة الثانية
+        function typeEmails() {
+            if (iE < emailText.length) {
+                document.getElementById("typing-emails").innerHTML += emailText.charAt(iE); iE++;
+                setTimeout(typeEmails, 100);
+            }
+        }
+
+        // Initialize Page 1 typing
+        window.onload = typeHead;
+        document.getElementById("envelope-div").style.display = 'none'; // Initially hide envelope
+
+        // 2. Transition to Step 2 (Red Screen)
         function startSurprise() {
             document.getElementById('step-1').classList.add('hidden-section');
             document.getElementById('step-2').classList.remove('hidden-section');
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            document.getElementById('step-2').classList.add('step-transition');
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.5 }, colors: ['#f472b6', '#ec4899', '#db2777'] });
         }
 
-        // الانتقال للمرحلة النهائية
+        // 3. Final Reveal Transition
         function finalReveal() {
             document.getElementById('step-2').classList.add('hidden-section');
             document.getElementById('step-3').classList.remove('hidden-section');
             window.scrollTo(0, 0);
             
-            // انيميشن القصاصات الملونة
+            // Heart Confetti Rain
             var duration = 5 * 1000;
             var end = Date.now() + duration;
+            var heartConfetti = confetti.shapeFromText({ text: '❤️', scalar: 2 });
+
             (function frame() {
-              confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 } });
-              confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 } });
+              confetti({ particleCount: 2, angle: 60, spread: 55, origin: { x: 0 }, shapes: [heartConfetti], scalar: 1.5 });
+              confetti({ particleCount: 2, angle: 120, spread: 55, origin: { x: 1 }, shapes: [heartConfetti], scalar: 1.5 });
               if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
 
             typeFinal();
         }
 
+        // Type Final Message in Heart
         function typeFinal() {
-            const msg = "Happy birthday, my soul. I love you, I’ve always loved you, and I’ll keep loving you forever. You are the most beautiful thing in the world; I wish we could always stay together. You are the most precious thing in my life and my entire world. ❤️";
+            const msg = "Happy birthday, Elaa, my soul. I love you, I’ve always loved you, and I’ll keep loving you forever. You are the most beautiful thing in the world; I wish we could always stay together. You are the most precious thing in my life and my entire world. ❤️";
             let j = 0;
             function write() {
                 if (j < msg.length) {
