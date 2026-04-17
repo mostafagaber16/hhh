@@ -7,282 +7,146 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #ffffff; scroll-behavior: smooth; overflow: hidden; }
+        body { font-family: 'Poppins', sans-serif; background-color: #fdf2f8; overflow-x: hidden; }
         .handwritten { font-family: 'Caveat', cursive; }
-        .cursive { font-family: 'Caveat', cursive; font-size: 2.5rem; font-weight: 700;}
         
-        /* Floating Top Title */
-        @keyframes slowFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        .slow-floating { animation: slowFloat 4s ease-in-out infinite; }
-
-        /* Slow Float for envelope */
-        @keyframes envelopeFloat {
-            0%, 100% { transform: translate(-50%, -50%); }
-            50% { transform: translate(-50%, -60%); }
-        }
-        .envelope-floating { animation: envelopeFloat 3s ease-in-out infinite; }
-        
-        /* Typewriter Cursor */
-        #typing-text::after, #typewriter-text::after {
-            content: "|";
-            animation: blink 1s infinite;
-        }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* The Envelope Style */
+        /* Envelope Styling */
+        .envelope-wrapper { display: none; margin-top: 2rem; }
         .envelope-classic {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 250px;
-            height: 180px;
-            background: #ffb6c1; /* lightpink */
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            cursor: pointer;
-            z-index: 10;
+            width: 280px; height: 190px; background: #fbcfe8; border-radius: 10px;
+            position: relative; cursor: pointer; margin: 0 auto;
+            box-shadow: 0 15px 35px rgba(219, 39, 119, 0.2);
+            transition: transform 0.3s;
         }
+        .envelope-classic:hover { transform: scale(1.05); }
         .envelope-classic::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-left: 125px solid transparent;
-            border-right: 125px solid transparent;
-            border-top: 90px solid #fcc2c2;
-            border-radius: 10px 10px 0 0;
-            transition: transform 0.6s ease;
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-left: 140px solid transparent; border-right: 140px solid transparent;
+            border-top: 100px solid #f9a8d4; border-radius: 10px 10px 0 0;
         }
-        .envelope-classic .heart-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ef4444; /* red */
-            font-size: 5rem;
-            z-index: 20;
-        }
-
-        /* Message Heart Background */
-        .message-heart {
-            background-color: #ef4444; /* red-500 */
-            width: 90%;
-            max-width: 500px;
-            padding: 40px;
-            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
-            position: relative;
-            transform: scale(0);
-            transition: transform 0.5s ease;
-        }
-        .message-heart.open { transform: scale(1); }
-        .message-heart::before,
-        .message-heart::after {
-            content: "";
-            position: absolute;
-            background-color: #ef4444;
-            border-radius: 50%;
-        }
-        .message-heart::before {
-            width: 100px; height: 100px;
-            top: -50px; left: 50px;
-        }
-        .message-heart::after {
-            width: 100px; height: 100px;
-            top: -50px; right: 50px;
-        }
+        .heart-icon { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 10; font-size: 3rem; }
         
-        /* Annoying Close Button */
-        #no-btn { 
-            position: absolute; 
-            transition: all 0.1s ease; 
-            z-index: 100; 
-            white-space: nowrap;
-            background: none;
-            border: none;
-            padding: 0;
-            cursor: pointer;
-        }
-        #no-btn .emoji-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #ffe4e6;
-            padding: 10px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        /* Floating Animation */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .floating { animation: float 3s ease-in-out infinite; }
 
+        .hidden-section { display: none; }
     </style>
 </head>
-<body onload="startTyping()">
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 slow-floating">
-        <div class="bg-pink-100 px-4 py-2 rounded-full shadow-md flex items-center space-x-2">
-            <span class="text-pink-500">💖</span>
-            <span class="handwritten text-xl text-pink-600 font-bold">Happy Birthday Habiba</span>
-            <span class="text-pink-500">💖</span>
+    <div id="step-1" class="text-center w-full max-w-lg">
+        <h1 id="typing-text" class="handwritten text-4xl md:text-5xl text-pink-600 min-h-[60px]"></h1>
+        <div class="envelope-wrapper mt-10">
+            <div class="envelope-classic floating" onclick="startSurprise()">
+                <div class="heart-icon">❤️</div>
+            </div>
+            <p class="mt-4 text-pink-400 animate-pulse font-semibold">Click the heart to open</p>
         </div>
     </div>
 
-    <section class="h-screen flex flex-col items-center justify-center text-center p-4 relative" id="hero-section">
-        <div class="text-3xl handwritten text-gray-800 mb-12 min-h-[50px]">
-            <span id="typing-text"></span>
-        </div>
-        
-        <div class="envelope-classic envelope-floating" onclick="openShow()">
-            <div class="heart-center">❤️</div>
-        </div>
-    </section>
+    <div id="step-2" class="hidden-section fixed inset-0 bg-pink-500 z-50 flex flex-col items-center justify-center p-6 text-white text-center">
+        <h2 class="handwritten text-5xl md:text-7xl mb-6">Surprise for Habiba!</h2>
+        <p class="text-xl mb-10 opacity-90">I made this especially for you...</p>
+        <button onclick="finalReveal()" class="bg-white text-pink-600 px-12 py-4 rounded-full font-bold text-2xl shadow-2xl hover:bg-pink-50 transition-all">
+            See attachment ✨
+        </button>
+    </div>
 
-    <section id="red-card-section" class="hidden min-h-screen bg-red-500 text-center p-8 flex flex-col items-center justify-center z-20">
-        <div class="w-[90%] max-w-xl bg-red-600 rounded-3xl p-10 shadow-2xl relative">
-            <h2 class="handwritten text-4xl text-white mb-6">A New Surprise!</h2>
-            <p class="text-white/80 leading-loose text-lg mb-10">Check out this awesome surprise for YOU!</p>
-            <button onclick="showFinalMessage()" class="bg-white text-red-600 px-8 py-3 rounded-full shadow-lg text-lg font-semibold hover:bg-gray-100 transition">see message</button>
+    <div id="step-3" class="hidden-section w-full max-w-5xl py-12">
+        <div class="bg-white rounded-[50px] p-8 md:p-12 shadow-2xl border-4 border-pink-200 text-center mb-16 relative">
+            <h2 class="handwritten text-4xl text-pink-600 mb-6">My Soul Habiba ❤️</h2>
+            <p id="final-message" class="text-gray-700 text-lg md:text-xl leading-relaxed italic"></p>
         </div>
-    </section>
 
-    <section id="final-section" class="hidden min-h-screen py-24 px-4 bg-white z-30">
-        <div class="message-heart text-center mx-auto mb-20" id="message-heart-element">
-            <h2 class="cursive text-white mb-8">Happy Birthday, My Soul</h2>
-            <p id="typewriter-text" class="text-white leading-loose text-lg mb-12 min-h-[150px] font-medium"></p>
-        </div>
-        
-        <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-8">
-            <div class="text-center">
-                <div class="rounded-2xl overflow-hidden shadow-xl mb-4 h-80 bg-gray-100">
-                    <img src="1.jpg" class="w-full h-full object-cover">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+            <div class="group">
+                <div class="bg-white p-4 rounded-3xl shadow-lg transform group-hover:rotate-2 transition-transform">
+                    <img src="1.jpg" class="rounded-2xl w-full h-80 object-cover bg-pink-100" alt="Habiba 1">
+                    <p class="handwritten text-2xl text-pink-500 mt-4">Smartest Girl</p>
                 </div>
-                <h3 class="handwritten text-2xl text-pink-600">Smartest</h3>
             </div>
-            <div class="text-center">
-                <div class="rounded-2xl overflow-hidden shadow-xl mb-4 h-80 bg-gray-100">
-                    <img src="2.jpg" class="w-full h-full object-cover">
+            <div class="group">
+                <div class="bg-white p-4 rounded-3xl shadow-lg transform group-hover:-rotate-2 transition-transform">
+                    <img src="2.jpg" class="rounded-2xl w-full h-80 object-cover bg-pink-100" alt="Habiba 2">
+                    <p class="handwritten text-2xl text-pink-500 mt-4">Most Beautiful</p>
                 </div>
-                <h3 class="handwritten text-2xl text-pink-600">Most Beautiful</h3>
             </div>
-            <div class="text-center">
-                <div class="rounded-2xl overflow-hidden shadow-xl mb-4 h-80 bg-gray-100">
-                    <img src="3.jpg" class="w-full h-full object-cover">
+            <div class="group">
+                <div class="bg-white p-4 rounded-3xl shadow-lg transform group-hover:rotate-2 transition-transform">
+                    <img src="3.jpg" class="rounded-2xl w-full h-80 object-cover bg-pink-100" alt="Habiba 3">
+                    <p class="handwritten text-2xl text-pink-500 mt-4">Best Girl Ever</p>
                 </div>
-                <h3 class="handwritten text-2xl text-pink-600">Best Girl Ever</h3>
             </div>
         </div>
         
-        <div class="text-center mt-20 px-4">
-            <h2 class="handwritten text-5xl md:text-6xl text-pink-500 leading-tight">You are everything, Habiba.</h2>
+        <div class="text-center mt-20">
+            <h2 class="handwritten text-5xl text-pink-500">You are everything.</h2>
         </div>
-
-        <div class="flex justify-center mt-12 relative overflow-visible h-16">
-            <button id="no-btn">
-               <div class="emoji-container text-gray-700">
-                   <span class="text-3xl mr-2">🥺</span>
-                   <span class="font-bold">Close</span>
-               </div>
-            </button>
-        </div>
-    </section>
+    </div>
 
     <script>
-        const initialText = "hey Habiba! you've got a new surprise";
-        const finalMessageText = "Happy birthday, my soul. I love you, I’ve always loved you, and I’ll keep loving you forever. I loved you in the past, I love you now, and I will love you until the day I die. You are the most beautiful thing in the world; I love you so, so much and I wish we could always stay together. You are the most precious thing in my life and my entire world. ❤️";
-        let isTyping = false;
+        // 1. Typing Effect Logic
+        const initialText = "hey Habiba! you've got a new surprise/";
+        let charIndex = 0;
 
-        // Typewriter function for specific elements
-        function startTyping() {
-            typeWriter("typing-text", initialText);
+        function type() {
+            const element = document.getElementById("typing-text");
+            if (charIndex < initialText.length) {
+                element.innerHTML += initialText.charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 100);
+            } else {
+                // Show envelope when typing finishes
+                gsap.to(".envelope-wrapper", { display: 'block', opacity: 1, duration: 1 });
+            }
         }
 
-        function typeWriter(elementId, text, speed = 50, callback) {
-            let i = 0;
-            const textElement = document.getElementById(elementId);
-            textElement.innerHTML = "";
-            isTyping = true;
+        // Start typing on load
+        window.onload = type;
+
+        // 2. Transition to Red/Pink screen
+        function startSurprise() {
+            document.getElementById('step-1').classList.add('hidden-section');
+            document.getElementById('step-2').classList.remove('hidden-section');
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+
+        // 3. Final Reveal
+        function finalReveal() {
+            document.getElementById('step-2').classList.add('hidden-section');
+            document.getElementById('step-3').classList.remove('hidden-section');
+            window.scrollTo(0, 0);
             
-            function type() {
-                if (i < text.length) {
-                    textElement.innerHTML += text.charAt(i);
+            // Final Confetti Burst
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+              confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 } });
+              confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 } });
+              if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+
+            typeFinalMessage();
+        }
+
+        function typeFinalMessage() {
+            const msg = "Happy birthday, my soul. I love you, I’ve always loved you, and I’ll keep loving you forever. You are the most beautiful thing in the world; I wish we could always stay together. You are the most precious thing in my life and my entire world. ❤️";
+            let i = 0;
+            const element = document.getElementById("final-message");
+            function typeMsg() {
+                if (i < msg.length) {
+                    element.innerHTML += msg.charAt(i);
                     i++;
-                    setTimeout(type, speed);
-                } else {
-                    isTyping = false;
-                    if (callback) callback();
+                    setTimeout(typeMsg, 40);
                 }
             }
-            type();
+            typeMsg();
         }
-
-        function openShow() {
-            gsap.to(".envelope-classic", { scale: 0, opacity: 0, duration: 0.5, ease: "back.in(1.7)" });
-            
-            setTimeout(() => {
-                document.getElementById('red-card-section').classList.remove('hidden');
-                gsap.from("#red-card-section", { opacity: 0, y: -100, duration: 0.7, ease: "power2.out" });
-                // Lock scrolling for this section
-                document.body.style.overflow = 'hidden'; 
-            }, 500);
-        }
-
-        function showFinalMessage() {
-            // Hide previous sections and show final
-            document.getElementById('hero-section').classList.add('hidden');
-            document.getElementById('red-card-section').classList.add('hidden');
-            const finalSection = document.getElementById('final-section');
-            finalSection.classList.remove('hidden');
-            
-            // Allow scrolling
-            document.body.style.overflow = 'auto'; 
-
-            // Confetti
-            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
-
-            // Open the heart animation
-            const heartElement = document.getElementById('message-heart-element');
-            setTimeout(() => {
-                heartElement.classList.add('open');
-                // Start typing the long message after heart opens
-                setTimeout(() => {
-                    typeWriter("typewriter-text", finalMessageText, 40); 
-                }, 500);
-            }, 50);
-
-            // Annoying Button initial placement
-            const noBtn = document.getElementById('no-btn');
-            noBtn.style.position = 'absolute';
-            noBtn.style.left = '50%';
-            noBtn.style.top = '50%';
-            noBtn.style.transform = 'translate(-50%, -50%)';
-        }
-
-        // The "Annoying" Close Button Logic
-        const noBtn = document.getElementById('no-btn');
-
-        noBtn.addEventListener('mouseover', () => {
-            const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-            const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-            
-            const randomX = Math.random() * maxX + 10;
-            const randomY = Math.random() * maxY + 10;
-            
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
-            noBtn.style.transform = 'none'; // Clear translate transform
-            
-            // Jump effect
-            gsap.to(noBtn, { scale: 1.2, duration: 0.1, yoyo: true, repeat: 1 });
-        });
     </script>
 </body>
 </html>
