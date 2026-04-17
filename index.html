@@ -10,142 +10,119 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #fdf2f8; overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background-color: #fdf2f8; overflow-x: hidden; margin: 0; }
         .handwritten { font-family: 'Caveat', cursive; }
-        
-        /* Envelope Styling */
-        .envelope-wrapper { display: none; margin-top: 2rem; }
+        .envelope-wrapper { display: none; opacity: 0; margin-top: 2rem; }
         .envelope-classic {
-            width: 280px; height: 190px; background: #fbcfe8; border-radius: 10px;
+            width: 250px; height: 170px; background: #fbcfe8; border-radius: 10px;
             position: relative; cursor: pointer; margin: 0 auto;
             box-shadow: 0 15px 35px rgba(219, 39, 119, 0.2);
-            transition: transform 0.3s;
         }
-        .envelope-classic:hover { transform: scale(1.05); }
         .envelope-classic::after {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            border-left: 140px solid transparent; border-right: 140px solid transparent;
-            border-top: 100px solid #f9a8d4; border-radius: 10px 10px 0 0;
+            border-left: 125px solid transparent; border-right: 125px solid transparent;
+            border-top: 90px solid #f9a8d4; border-radius: 10px 10px 0 0;
         }
-        .heart-icon { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 10; font-size: 3rem; }
-        
-        /* Floating Animation */
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .heart-icon { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 10; font-size: 2.5rem; }
         .floating { animation: float 3s ease-in-out infinite; }
-
-        .hidden-section { display: none; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .hidden-section { display: none !important; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
     <div id="step-1" class="text-center w-full max-w-lg">
-        <h1 id="typing-text" class="handwritten text-4xl md:text-5xl text-pink-600 min-h-[60px]"></h1>
-        <div class="envelope-wrapper mt-10">
+        <h1 id="typing-text" class="handwritten text-4xl text-pink-600 min-h-[60px]"></h1>
+        <div class="envelope-wrapper" id="envelope-div">
             <div class="envelope-classic floating" onclick="startSurprise()">
                 <div class="heart-icon">❤️</div>
             </div>
-            <p class="mt-4 text-pink-400 animate-pulse font-semibold">Click the heart to open</p>
+            <p class="mt-4 text-pink-400 font-semibold animate-pulse">Click the heart to open</p>
         </div>
     </div>
 
     <div id="step-2" class="hidden-section fixed inset-0 bg-pink-500 z-50 flex flex-col items-center justify-center p-6 text-white text-center">
         <h2 class="handwritten text-5xl md:text-7xl mb-6">Surprise for Habiba!</h2>
         <p class="text-xl mb-10 opacity-90">I made this especially for you...</p>
-        <button onclick="finalReveal()" class="bg-white text-pink-600 px-12 py-4 rounded-full font-bold text-2xl shadow-2xl hover:bg-pink-50 transition-all">
+        <button onclick="finalReveal()" class="bg-white text-pink-600 px-12 py-4 rounded-full font-bold text-2xl shadow-2xl hover:scale-110 transition-transform">
             See attachment ✨
         </button>
     </div>
 
     <div id="step-3" class="hidden-section w-full max-w-5xl py-12">
-        <div class="bg-white rounded-[50px] p-8 md:p-12 shadow-2xl border-4 border-pink-200 text-center mb-16 relative">
+        <div class="bg-white rounded-[40px] p-8 shadow-2xl border-4 border-pink-100 text-center mb-16 mx-4">
             <h2 class="handwritten text-4xl text-pink-600 mb-6">My Soul Habiba ❤️</h2>
-            <p id="final-message" class="text-gray-700 text-lg md:text-xl leading-relaxed italic"></p>
+            <p id="final-message" class="text-gray-700 text-lg leading-relaxed italic"></p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
-            <div class="group">
-                <div class="bg-white p-4 rounded-3xl shadow-lg transform group-hover:rotate-2 transition-transform">
-                    <img src="1.jpg" class="rounded-2xl w-full h-80 object-cover bg-pink-100" alt="Habiba 1">
-                    <p class="handwritten text-2xl text-pink-500 mt-4">Smartest Girl</p>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-6">
+            <div class="bg-white p-3 rounded-2xl shadow-lg transform rotate-2">
+                <img src="1.jpg.JPG" class="rounded-xl w-full h-72 object-cover" onerror="this.src='https://via.placeholder.com/400x500?text=Habiba+1'">
+                <p class="handwritten text-xl text-pink-500 mt-2 text-center">Smartest</p>
             </div>
-            <div class="group">
-                <div class="bg-white p-4 rounded-3xl shadow-lg transform group-hover:-rotate-2 transition-transform">
-                    <img src="2.jpg" class="rounded-2xl w-full h-80 object-cover bg-pink-100" alt="Habiba 2">
-                    <p class="handwritten text-2xl text-pink-500 mt-4">Most Beautiful</p>
-                </div>
+            <div class="bg-white p-3 rounded-2xl shadow-lg transform -rotate-2">
+                <img src="2.jpg.JPG" class="rounded-xl w-full h-72 object-cover" onerror="this.src='https://via.placeholder.com/400x500?text=Habiba+2'">
+                <p class="handwritten text-xl text-pink-500 mt-2 text-center">Most Beautiful</p>
             </div>
-            <div class="group">
-                <div class="bg-white p-4 rounded-3xl shadow-lg transform group-hover:rotate-2 transition-transform">
-                    <img src="3.jpg" class="rounded-2xl w-full h-80 object-cover bg-pink-100" alt="Habiba 3">
-                    <p class="handwritten text-2xl text-pink-500 mt-4">Best Girl Ever</p>
-                </div>
+            <div class="bg-white p-3 rounded-2xl shadow-lg transform rotate-1">
+                <img src="3.jpg.JPG" class="rounded-xl w-full h-72 object-cover" onerror="this.src='https://via.placeholder.com/400x500?text=Habiba+3'">
+                <p class="handwritten text-xl text-pink-500 mt-2 text-center">Best Girl Ever</p>
             </div>
-        </div>
-        
-        <div class="text-center mt-20">
-            <h2 class="handwritten text-5xl text-pink-500">You are everything.</h2>
         </div>
     </div>
 
     <script>
-        // 1. Typing Effect Logic
-        const initialText = "hey Habiba! you've got a new surprise/";
-        let charIndex = 0;
-
+        // تأثير الكتابة في البداية
+        const text = "hey Habiba! you've got a new surprise/";
+        let i = 0;
         function type() {
-            const element = document.getElementById("typing-text");
-            if (charIndex < initialText.length) {
-                element.innerHTML += initialText.charAt(charIndex);
-                charIndex++;
+            if (i < text.length) {
+                document.getElementById("typing-text").innerHTML += text.charAt(i);
+                i++;
                 setTimeout(type, 100);
             } else {
-                // Show envelope when typing finishes
-                gsap.to(".envelope-wrapper", { display: 'block', opacity: 1, duration: 1 });
+                document.getElementById("envelope-div").style.display = "block";
+                gsap.to("#envelope-div", { opacity: 1, duration: 1 });
             }
         }
-
-        // Start typing on load
         window.onload = type;
 
-        // 2. Transition to Red/Pink screen
+        // الانتقال للمرحلة الثانية
         function startSurprise() {
             document.getElementById('step-1').classList.add('hidden-section');
             document.getElementById('step-2').classList.remove('hidden-section');
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
 
-        // 3. Final Reveal
+        // الانتقال للمرحلة النهائية
         function finalReveal() {
             document.getElementById('step-2').classList.add('hidden-section');
             document.getElementById('step-3').classList.remove('hidden-section');
             window.scrollTo(0, 0);
             
-            // Final Confetti Burst
-            var duration = 3 * 1000;
+            // انيميشن القصاصات الملونة
+            var duration = 5 * 1000;
             var end = Date.now() + duration;
-
             (function frame() {
               confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 } });
               confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 } });
               if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
 
-            typeFinalMessage();
+            typeFinal();
         }
 
-        function typeFinalMessage() {
+        function typeFinal() {
             const msg = "Happy birthday, my soul. I love you, I’ve always loved you, and I’ll keep loving you forever. You are the most beautiful thing in the world; I wish we could always stay together. You are the most precious thing in my life and my entire world. ❤️";
-            let i = 0;
-            const element = document.getElementById("final-message");
-            function typeMsg() {
-                if (i < msg.length) {
-                    element.innerHTML += msg.charAt(i);
-                    i++;
-                    setTimeout(typeMsg, 40);
+            let j = 0;
+            function write() {
+                if (j < msg.length) {
+                    document.getElementById("final-message").innerHTML += msg.charAt(j);
+                    j++;
+                    setTimeout(write, 40);
                 }
             }
-            typeMsg();
+            write();
         }
     </script>
 </body>
